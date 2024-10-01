@@ -32,7 +32,7 @@ export default function ExpenseList({ expenses }: ExpenseListProps) {
             {expenses.map((expense, index) => (
               <TableRow key={index}>
                 <TableCell>{expense.name}</TableCell>
-                <TableCell>${expense.amount.toFixed(2)}</TableCell>
+                <TableCell>${Number(expense.amount).toFixed(2)}</TableCell>
               </TableRow>
             ))}
           </TableBody>

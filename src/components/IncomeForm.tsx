@@ -4,10 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 interface IncomeFormProps {
-  incomeFacu: number;
-  incomeMica: number;
-  setIncomeFacu: (income: number) => void;
-  setIncomeMica: (income: number) => void;
+  incomeFacu: string;
+  incomeMica: string;
+  setIncomeFacu: (income: string) => void;
+  setIncomeMica: (income: string) => void;
 }
 
 export default function IncomeForm({
@@ -16,6 +16,15 @@ export default function IncomeForm({
   setIncomeFacu,
   setIncomeMica,
 }: IncomeFormProps) {
+  const handleIncomeChange =
+    (setter: (value: string) => void) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      if (value === "" || /^\d+$/.test(value)) {
+        setter(value);
+      }
+    };
+
   return (
     <Card>
       <CardHeader>
@@ -27,18 +36,24 @@ export default function IncomeForm({
             <Label htmlFor="incomeFacu">Tu ingreso</Label>
             <Input
               id="incomeFacu"
-              type="number"
+              type="text"
+              inputMode="numeric"
+              pattern="\d*"
               value={incomeFacu}
-              onChange={(e) => setIncomeFacu(Number(e.target.value))}
+              onChange={handleIncomeChange(setIncomeFacu)}
+              placeholder="Ingresa tu ingreso"
             />
           </div>
           <div>
-            <Label htmlFor="incomeMica">Ingreso de tu novia</Label>
+            <Label htmlFor="incomeMica">Ingreso de Mica</Label>
             <Input
               id="incomeMica"
-              type="number"
+              type="text"
+              inputMode="numeric"
+              pattern="\d*"
               value={incomeMica}
-              onChange={(e) => setIncomeMica(Number(e.target.value))}
+              onChange={handleIncomeChange(setIncomeMica)}
+              placeholder="Ingresa el ingreso de Mica"
             />
           </div>
         </div>

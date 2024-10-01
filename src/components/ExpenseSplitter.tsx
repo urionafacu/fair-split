@@ -7,8 +7,8 @@ import ExpenseSummary from "./ExpenseSummary";
 import ExpenseChart from "./ExpenseChart";
 
 export default function ExpenseSplitter() {
-  const [incomeFacu, setIncomeFacu] = useState<number>(0);
-  const [incomeMica, setIncomeMica] = useState<number>(0);
+  const [incomeFacu, setIncomeFacu] = useState<string>("");
+  const [incomeMica, setIncomeMica] = useState<string>("");
   const [expenses, setExpenses] = useState<Expense[]>([]);
 
   const addExpense = (newExpense: Expense) => {
@@ -16,12 +16,12 @@ export default function ExpenseSplitter() {
   };
 
   const totalExpenses = expenses.reduce(
-    (sum, expense) => sum + expense.amount,
+    (sum, expense) => sum + Number(expense.amount),
     0
   );
-  const totalIncome = incomeFacu + incomeMica;
-  const percentageFacu = incomeFacu / totalIncome || 0;
-  const percentageMica = incomeMica / totalIncome || 0;
+  const totalIncome = Number(incomeFacu) + Number(incomeMica);
+  const percentageFacu = totalIncome ? Number(incomeFacu) / totalIncome : 0;
+  const percentageMica = totalIncome ? Number(incomeMica) / totalIncome : 0;
   const partFacu = percentageFacu * totalExpenses;
   const partMica = percentageMica * totalExpenses;
 

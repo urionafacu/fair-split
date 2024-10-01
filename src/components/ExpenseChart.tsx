@@ -12,8 +12,8 @@ export default function ExpenseChart({
   partMica,
 }: ExpenseChartProps) {
   const data = [
-    { name: "Tu parte", value: partFacu },
-    { name: "Parte de tu novia", value: partMica },
+    { name: "Parte de Facu", value: partFacu },
+    { name: "Parte de Mica", value: partMica },
   ];
 
   const COLORS = ["#0088FE", "#00C49F"];

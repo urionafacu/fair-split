@@ -12,13 +12,21 @@ interface ExpenseFormProps {
 export default function ExpenseForm({ addExpense }: ExpenseFormProps) {
   const [newExpense, setNewExpense] = useState<Expense>({
     name: "",
-    amount: 0,
+    amount: "",
   });
 
   const handleAddExpense = () => {
-    if (newExpense.name && newExpense.amount > 0) {
-      addExpense(newExpense);
-      setNewExpense({ name: "", amount: 0 });
+    const amount = parseFloat(newExpense.amount);
+    if (newExpense.name && amount > 0) {
+      addExpense({ ...newExpense, amount: amount.toString() });
+      setNewExpense({ name: "", amount: "" });
+    }
+  };
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value === "" || /^\d*\.?\d*$/.test(value)) {
+      setNewExpense({ ...newExpense, amount: value });
     }
   };
 
@@ -37,17 +45,18 @@ export default function ExpenseForm({ addExpense }: ExpenseFormProps) {
               onChange={(e) =>
                 setNewExpense({ ...newExpense, name: e.target.value })
               }
+              placeholder="Ingresa el nombre del gasto"
             />
           </div>
           <div>
             <Label htmlFor="expenseAmount">Monto</Label>
             <Input
               id="expenseAmount"
-              type="number"
+              type="text"
+              inputMode="decimal"
               value={newExpense.amount}
-              onChange={(e) =>
-                setNewExpense({ ...newExpense, amount: Number(e.target.value) })
-              }
+              onChange={handleAmountChange}
+              placeholder="Ingresa el monto del gasto"
             />
           </div>
           <Button onClick={handleAddExpense}>Agregar Gasto</Button>
