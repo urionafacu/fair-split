@@ -15,6 +15,10 @@ export default function ExpenseSplitter() {
     setExpenses([...expenses, newExpense]);
   };
 
+  const deleteExpense = (position: number) => {
+    setExpenses(expenses.filter((_, i) => i !== position));
+  };
+
   const totalExpenses = expenses.reduce(
     (sum, expense) => sum + Number(expense.amount),
     0
@@ -40,7 +44,7 @@ export default function ExpenseSplitter() {
         <ExpenseForm addExpense={addExpense} />
       </div>
       <div className="mt-6">
-        <ExpenseList expenses={expenses} />
+        <ExpenseList expenses={expenses} onDeleteExpense={deleteExpense} />
       </div>
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
         <ExpenseSummary
