@@ -1,15 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Expense } from "@/types";
 import IncomeForm from "./IncomeForm";
 import ExpenseForm from "./ExpenseForm";
 import ExpenseList from "./ExpenseList";
 import ExpenseSummary from "./ExpenseSummary";
 import ExpenseChart from "./ExpenseChart";
+import { fetchExpenses } from "@/lib/services/expenseService";
+import { fetchIncomes } from "@/lib/services/incomeService";
 
 export default function ExpenseSplitter() {
   const [incomeFacu, setIncomeFacu] = useState<string>("");
   const [incomeMica, setIncomeMica] = useState<string>("");
   const [expenses, setExpenses] = useState<Expense[]>([]);
+
+  useEffect(() => {
+    const obtainIncomes = async () => {
+      try {
+        const incomes = await fetchIncomes();
+        const incomeFacu = incomes.find((i) => i.name === "Facu")?.amount ?? 0;
+        setIncomeFacu(String(incomeFacu));
+        const incomeMica = incomes.find((i) => i.name === "Mica")?.amount ?? 0;
+        setIncomeMica(String(incomeMica));
+      } catch {}
+    };
+    obtainIncomes();
+  }, []);
+
+  useEffect(() => {
+    const obtainExpenses = async () => {
+      try {
+        const expenses = await fetchExpenses();
+        setExpenses(
+          expenses.map((e) => ({ name: e.name, amount: String(e.amount) }))
+        );
+      } catch {}
+    };
+    obtainExpenses();
+  }, []);
 
   const addExpense = (newExpense: Expense) => {
     setExpenses([...expenses, newExpense]);

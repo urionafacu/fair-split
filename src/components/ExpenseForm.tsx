@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Expense } from "@/types";
+import { saveExpense } from "@/lib/services/expenseService";
 
 interface ExpenseFormProps {
   addExpense: (expense: Expense) => void;
@@ -20,6 +21,9 @@ export default function ExpenseForm({ addExpense }: ExpenseFormProps) {
     if (newExpense.name && amount > 0) {
       addExpense({ ...newExpense, amount: amount.toString() });
       setNewExpense({ name: "", amount: "" });
+      try {
+        saveExpense(newExpense.name, amount);
+      } catch {}
     }
   };
 
