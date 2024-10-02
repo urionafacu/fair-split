@@ -19,3 +19,14 @@ export async function saveExpense(name: string, amount: number): Promise<void> {
     throw error;
   }
 }
+
+export async function deleteExpense(id: number): Promise<void> {
+  const { error } = await supabase.from("expense").delete().eq("id", id);
+
+  if (error) {
+    console.error("Error deleting expense:", error);
+    throw error;
+  } else {
+    console.log(`Expense with id ${id} deleted successfully`);
+  }
+}

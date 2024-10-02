@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Trash2, Search } from "lucide-react";
-import { Expense } from "@/types";
+import { Expense } from "@/types/supabase";
 import { formatCurrency } from "@/utils/numberFormat";
 
 interface ExpenseListProps {
@@ -55,15 +55,15 @@ export default function ExpenseList({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredExpenses.map((expense, index) => (
-              <TableRow key={index}>
+            {filteredExpenses.map((expense) => (
+              <TableRow key={expense.id}>
                 <TableCell className="font-medium">{expense.name}</TableCell>
                 <TableCell>{formatCurrency(Number(expense.amount))}</TableCell>
                 <TableCell>
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => onDeleteExpense(index)}
+                    onClick={() => onDeleteExpense(expense.id!)}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>

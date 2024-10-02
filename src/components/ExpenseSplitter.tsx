@@ -1,58 +1,58 @@
-import React, { useEffect, useState } from "react";
-import { Expense } from "@/types";
+"use client";
+
+import React, { useState } from "react";
 import IncomeForm from "./IncomeForm";
 import ExpenseForm from "./ExpenseForm";
 import ExpenseList from "./ExpenseList";
 import ExpenseSummary from "./ExpenseSummary";
 import ExpenseChart from "./ExpenseChart";
-import { fetchExpenses } from "@/lib/services/expenseService";
-import { fetchIncomes } from "@/lib/services/incomeService";
+import { Expense, Income } from "@/types/supabase";
+import { Expense as LocalExpense } from "@/types";
+import {
+  saveExpense,
+  deleteExpense as supabaseDeleteExpense,
+} from "@/lib/services/expenseService";
 
-export default function ExpenseSplitter() {
-  const [incomeFacu, setIncomeFacu] = useState<string>("");
-  const [incomeMica, setIncomeMica] = useState<string>("");
-  const [expenses, setExpenses] = useState<Expense[]>([]);
+type Props = {
+  incomes: Income[];
+  expenses: Expense[];
+};
 
-  useEffect(() => {
-    const obtainIncomes = async () => {
-      try {
-        const incomes = await fetchIncomes();
-        const incomeFacu = incomes.find((i) => i.name === "Facu")?.amount ?? 0;
-        setIncomeFacu(String(incomeFacu));
-        const incomeMica = incomes.find((i) => i.name === "Mica")?.amount ?? 0;
-        setIncomeMica(String(incomeMica));
-      } catch {}
-    };
-    obtainIncomes();
-  }, []);
+export default function ExpenseSplitter({ incomes, expenses }: Props) {
+  const [localIncomes, setLocalIncomes] = useState(incomes);
+  const [localExpenses, setLocalExpenses] = useState(expenses);
 
-  useEffect(() => {
-    const obtainExpenses = async () => {
-      try {
-        const expenses = await fetchExpenses();
-        setExpenses(
-          expenses.map((e) => ({ name: e.name, amount: String(e.amount) }))
-        );
-      } catch {}
-    };
-    obtainExpenses();
-  }, []);
-
-  const addExpense = (newExpense: Expense) => {
-    setExpenses([...expenses, newExpense]);
+  const addExpense = (newExpense: LocalExpense) => {
+    const amount = Number(newExpense);
+    setLocalExpenses([
+      ...expenses,
+      {
+        name: newExpense.name,
+        amount,
+      },
+    ]);
+    saveExpense(newExpense.name, amount);
   };
 
-  const deleteExpense = (position: number) => {
-    setExpenses(expenses.filter((_, i) => i !== position));
+  const deleteExpense = (id: Expense["id"]) => {
+    setLocalExpenses(expenses.filter((_, i) => i !== id));
+    supabaseDeleteExpense(id!);
   };
 
-  const totalExpenses = expenses.reduce(
+  const totalExpenses = localExpenses.reduce(
     (sum, expense) => sum + Number(expense.amount),
     0
   );
-  const totalIncome = Number(incomeFacu) + Number(incomeMica);
-  const percentageFacu = totalIncome ? Number(incomeFacu) / totalIncome : 0;
-  const percentageMica = totalIncome ? Number(incomeMica) / totalIncome : 0;
+  const totalIncome = localIncomes.reduce(
+    (prev, current) => prev + current.amount,
+    0
+  );
+  const percentageFacu = localIncomes[0]
+    ? localIncomes[0].amount / totalIncome
+    : 0;
+  const percentageMica = localIncomes[1]
+    ? localIncomes[1].amount / totalIncome
+    : 0;
   const partFacu = percentageFacu * totalExpenses;
   const partMica = percentageMica * totalExpenses;
 
@@ -62,16 +62,11 @@ export default function ExpenseSplitter() {
         Divisor de Gastos
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <IncomeForm
-          incomeFacu={incomeFacu}
-          incomeMica={incomeMica}
-          setIncomeFacu={setIncomeFacu}
-          setIncomeMica={setIncomeMica}
-        />
+        <IncomeForm incomes={localIncomes} setIncomes={setLocalIncomes} />
         <ExpenseForm addExpense={addExpense} />
       </div>
       <div className="mt-6">
-        <ExpenseList expenses={expenses} onDeleteExpense={deleteExpense} />
+        <ExpenseList expenses={localExpenses} onDeleteExpense={deleteExpense} />
       </div>
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
         <ExpenseSummary

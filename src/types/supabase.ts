@@ -1,15 +1,15 @@
 export type Income = {
-  id: number;
+  id?: number;
+  created_at?: string;
   name: string;
   amount: number;
-  created_at: string;
 };
 
 export type Expense = {
-  id: number;
+  id?: number;
+  created_at?: string;
   name: string;
   amount: number;
-  created_at: string;
 };
 
 export type Database = {

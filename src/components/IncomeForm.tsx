@@ -2,28 +2,25 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Income } from "@/types/supabase";
 
 interface IncomeFormProps {
-  incomeFacu: string;
-  incomeMica: string;
-  setIncomeFacu: (income: string) => void;
-  setIncomeMica: (income: string) => void;
+  incomes: Income[];
+  setIncomes: React.Dispatch<React.SetStateAction<Income[]>>;
 }
 
-export default function IncomeForm({
-  incomeFacu,
-  incomeMica,
-  setIncomeFacu,
-  setIncomeMica,
-}: IncomeFormProps) {
-  const handleIncomeChange =
-    (setter: (value: string) => void) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      if (value === "" || /^\d+$/.test(value)) {
-        setter(value);
-      }
-    };
+export default function IncomeForm({ incomes, setIncomes }: IncomeFormProps) {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    id: Income["id"]
+  ) => {
+    const value = e.target.value;
+    setIncomes((incomes) => {
+      const income = incomes.find((i) => i.id === id)!;
+      income.amount = Number(value);
+      return [income, ...incomes.filter((i) => i.id === id)];
+    });
+  };
 
   return (
     <Card>
@@ -32,30 +29,22 @@ export default function IncomeForm({
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div>
-            <Label htmlFor="incomeFacu">Tu ingreso</Label>
-            <Input
-              id="incomeFacu"
-              type="text"
-              inputMode="numeric"
-              pattern="\d*"
-              value={incomeFacu}
-              onChange={handleIncomeChange(setIncomeFacu)}
-              placeholder="Ingresa tu ingreso"
-            />
-          </div>
-          <div>
-            <Label htmlFor="incomeMica">Ingreso de Mica</Label>
-            <Input
-              id="incomeMica"
-              type="text"
-              inputMode="numeric"
-              pattern="\d*"
-              value={incomeMica}
-              onChange={handleIncomeChange(setIncomeMica)}
-              placeholder="Ingresa el ingreso de Mica"
-            />
-          </div>
+          {incomes.map((inc) => (
+            <div key={`${inc.id}-${inc.name}`}>
+              <Label htmlFor={`income-${inc.name}`}>
+                Ingreso de {inc.name}
+              </Label>
+              <Input
+                id="incomeFacu"
+                type="text"
+                inputMode="numeric"
+                pattern="\d*"
+                value={inc.amount}
+                onChange={(e) => handleChange(e, inc.id)}
+                placeholder="Ingresa tu ingreso"
+              />
+            </div>
+          ))}
         </div>
       </CardContent>
     </Card>
