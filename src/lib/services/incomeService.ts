@@ -1,6 +1,5 @@
 import { supabase } from "../supabaseClient";
 import { Income } from "@/types/supabase";
-import { revalidatePath } from "next/cache";
 
 export async function fetchIncomes(): Promise<Income[]> {
   const { data, error } = await supabase.from("income").select("*");
@@ -19,5 +18,4 @@ export async function saveIncome(name: string, amount: number): Promise<void> {
     console.error("Error inserting income:", error);
     throw error;
   }
-  revalidatePath("/");
 }

@@ -1,6 +1,5 @@
 import { supabase } from "../supabaseClient";
 import { Expense } from "@/types/supabase";
-import { revalidatePath } from "next/cache";
 
 export async function fetchExpenses(): Promise<Expense[]> {
   const { data, error } = await supabase.from("expense").select("*");
@@ -12,14 +11,20 @@ export async function fetchExpenses(): Promise<Expense[]> {
   return data ?? [];
 }
 
-export async function saveExpense(name: string, amount: number): Promise<void> {
-  const { error } = await supabase.from("expense").insert([{ name, amount }]);
+export async function saveExpense(
+  name: string,
+  amount: number
+): Promise<Expense> {
+  const { error, data } = await supabase
+    .from("expense")
+    .insert([{ name, amount }])
+    .select();
 
   if (error) {
     console.error("Error inserting expense:", error);
     throw error;
   }
-  revalidatePath("/");
+  return data[0] as Expense;
 }
 
 export async function deleteExpense(id: number): Promise<void> {
@@ -29,5 +34,4 @@ export async function deleteExpense(id: number): Promise<void> {
     console.error("Error deleting expense:", error);
     throw error;
   }
-  revalidatePath("/");
 }

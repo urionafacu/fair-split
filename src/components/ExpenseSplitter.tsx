@@ -7,11 +7,7 @@ import ExpenseList from "./ExpenseList";
 import ExpenseSummary from "./ExpenseSummary";
 import ExpenseChart from "./ExpenseChart";
 import { Expense, Income } from "@/types/supabase";
-import { Expense as LocalExpense } from "@/types";
-import {
-  saveExpense,
-  deleteExpense as supabaseDeleteExpense,
-} from "@/lib/services/expenseService";
+import { deleteExpense as supabaseDeleteExpense } from "@/lib/services/expenseService";
 
 type Props = {
   incomes: Income[];
@@ -22,20 +18,12 @@ export default function ExpenseSplitter({ incomes, expenses }: Props) {
   const [localIncomes, setLocalIncomes] = useState(incomes);
   const [localExpenses, setLocalExpenses] = useState(expenses);
 
-  const addExpense = (newExpense: LocalExpense) => {
-    const amount = Number(newExpense);
-    setLocalExpenses([
-      ...expenses,
-      {
-        name: newExpense.name,
-        amount,
-      },
-    ]);
-    saveExpense(newExpense.name, amount);
+  const addExpense = (newExpense: Expense) => {
+    setLocalExpenses([...expenses, newExpense]);
   };
 
   const deleteExpense = (id: Expense["id"]) => {
-    setLocalExpenses(expenses.filter((_, i) => i !== id));
+    setLocalExpenses(expenses.filter((e) => e.id !== id));
     supabaseDeleteExpense(id!);
   };
 

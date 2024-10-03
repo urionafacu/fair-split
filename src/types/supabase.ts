@@ -6,8 +6,8 @@ export type Income = {
 };
 
 export type Expense = {
-  id?: number;
-  created_at?: string;
+  id: number;
+  created_at: string;
   name: string;
   amount: number;
 };
