@@ -7,6 +7,8 @@ interface ExpenseChartProps {
   partMica: number;
 }
 
+const COLORS = ["#0088FE", "#00C49F"];
+
 export default function ExpenseChart({
   partFacu,
   partMica,
@@ -15,8 +17,6 @@ export default function ExpenseChart({
     { name: "Parte de Facu", value: partFacu },
     { name: "Parte de Mica", value: partMica },
   ];
-
-  const COLORS = ["#0088FE", "#00C49F"];
 
   return (
     <Card>
@@ -34,8 +34,9 @@ export default function ExpenseChart({
               outerRadius={80}
               fill="#8884d8"
               dataKey="value"
+              label={({ percent }) => `${(percent * 100).toFixed(2)}%`}
             >
-              {data.map((entry, index) => (
+              {data.map((_, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}

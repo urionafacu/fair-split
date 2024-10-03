@@ -33,20 +33,14 @@ export default function ExpenseSummary({
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span>Parte de Facu:</span>
-              <span className="font-semibold">
-                {formatCurrency(partFacu)} (
-                {(isNaN(percentageFacu) ? 0 : percentageFacu).toFixed(1)}%)
-              </span>
+              <span className="font-semibold">{formatCurrency(partFacu)}</span>
             </div>
             <Progress value={percentageFacu} className="h-2" />
           </div>
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span>Parte de Mica:</span>
-              <span className="font-semibold">
-                {formatCurrency(partMica)} (
-                {(isNaN(percentageMica) ? 0 : percentageMica).toFixed(1)}%)
-              </span>
+              <span className="font-semibold">{formatCurrency(partMica)}</span>
             </div>
             <Progress value={percentageMica} className="h-2" />
           </div>
