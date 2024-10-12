@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Fair Split",
-    short_name: "FaitSplit",
+    short_name: "FairSplit",
     description: "A Progressive Web App for couples to manage shared expenses",
     start_url: "/",
     display: "standalone",
