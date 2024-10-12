@@ -7,11 +7,11 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "A Progressive Web App for couples to manage shared expenses",
     start_url: "/",
     display: "standalone",
-    background_color: "#ffffff",
+    background_color: "#fff",
     theme_color: "#fff",
     icons: [
       {
-        src: "/favicon.ico",
+        src: "/favicon.png",
         sizes: "any",
         type: "image/x-ico",
       },
