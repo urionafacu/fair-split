@@ -7,8 +7,8 @@ import { Loader2 } from 'lucide-react'
 const RegisterForm = ({ className }: Props) => {
   return (
     <form className={`${cn(className)} flex flex-col gap-4`}>
-      <Input id='name' name='name' placeholder='Juan' label='Nombre completo' />
-      <Input id='lastName' name='lastName' placeholder='Pérez' label='Apellido' />
+      <Input id='name' name='name' type='text' placeholder='Juan' label='Nombre completo' />
+      <Input id='lastName' name='lastName' type='text' placeholder='Pérez' label='Apellido' />
       <Input
         id='email'
         name='email'
