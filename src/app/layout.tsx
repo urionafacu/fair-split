@@ -21,6 +21,7 @@ export default function RootLayout({
     <html lang='en'>
       <head>
         <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1' />
+        <meta name='theme-color' content='#669396' />
       </head>
       <body className={`${openSans.className} antialiased`}>
         <main>{children}</main>
