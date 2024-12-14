@@ -20,7 +20,12 @@ body {
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
+    --primary: #669396;
+    --dark-green: #1D6579;
+    --yellow: #FDF7E9;
+    --white: #F1F4F4;
+    --dark: #282F30;
+    --grey: #77898A;
     --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -75,4 +80,29 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Tailwind Components */
+
+.page-container {
+  @apply min-h-screen py-8 px-4 sm:px-6 lg:px-8;
+}
+
+input[type="color"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="text"],
+input[type="time"],
+input[type="url"],
+input[type="week"],
+select:focus,
+textarea {
+  font-size: 16px;
 }
