@@ -13,9 +13,13 @@ import { Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { LoginSchemaType, loginSchema } from './schema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useToast } from '@/hooks/use-toast'
+import { useRouter } from 'next/navigation'
 
 const LoginForm = ({ className }: Props) => {
   const [isPending, startTransition] = useTransition()
+  const { toast } = useToast()
+  const router = useRouter()
 
   const {
     register,
@@ -31,9 +35,18 @@ const LoginForm = ({ className }: Props) => {
 
   const onSubmit = (data: LoginSchemaType) => {
     startTransition(async () => {
-      const { success, message } = await loginUserAction(data)
+      const { success } = await loginUserAction(data)
 
-      console.log({ success, message })
+      if (!success) {
+        toast({
+          title: 'Ups!',
+          description: 'Las credenciales no son las correctas',
+          variant: 'destructive',
+        })
+        return
+      }
+
+      router.push('/')
     })
   }
 
@@ -62,7 +75,7 @@ const LoginForm = ({ className }: Props) => {
           <Switch id='remember-me' />
           <Label htmlFor='remember-me'>Recordarme</Label>
         </div>
-        <Link href='/' className='text-[#176474] text-sm self-center'>
+        <Link href='/' className='text-primary text-sm self-center'>
           ¿Olvidaste tu contraseña?
         </Link>
       </section>
@@ -73,7 +86,7 @@ const LoginForm = ({ className }: Props) => {
 
       <footer className='w-full flex justify-center gap-2 mt-12'>
         <label className='text-sm'>¿No tienes cuenta?</label>
-        <Link href='/register' className='text-[#176474] text-sm'>
+        <Link href='/register' className='text-primary text-sm'>
           Registrarse
         </Link>
       </footer>
