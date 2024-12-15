@@ -1,6 +1,6 @@
 'use client'
 
-import { FormEvent, useTransition } from 'react'
+import { useState, useTransition } from 'react'
 import { loginUserAction } from '@/app/actions/auth'
 import { Input } from '@/molecules'
 import { Props } from './types'
@@ -19,12 +19,12 @@ import { useRouter } from 'next/navigation'
 const LoginForm = ({ className }: Props) => {
   const [isPending, startTransition] = useTransition()
   const { toast } = useToast()
+  const [rememberMe, setRememberMe] = useState(false)
   const router = useRouter()
 
   const {
     register,
     handleSubmit,
-    getValues,
     formState: { errors },
   } = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
@@ -34,48 +34,35 @@ const LoginForm = ({ className }: Props) => {
     },
   })
 
-  const handleFormSubmit = async (data: LoginSchemaType) => {
-    const { success } = await loginUserAction(data)
+  const onSubmit = async (data: LoginSchemaType) => {
+    if (isPending) return
 
-    if (!success) {
-      toast({
-        title: 'Ups!',
-        description: 'Las credenciales no son las correctas',
-        variant: 'destructive',
-      })
-      return
-    }
+    startTransition(async () => {
+      try {
+        const { success } = await loginUserAction(data)
 
-    router.push('/')
-  }
+        if (!success) {
+          toast({
+            title: 'Ups!',
+            description: 'Las credenciales no son las correctas',
+            variant: 'destructive',
+          })
+          return
+        }
 
-  const onSubmit = (data: LoginSchemaType) => {
-    startTransition(() => handleFormSubmit(data))
-  }
-
-  const handleNativeSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    const formData = getValues()
-
-    if (!formData.email || !formData.password) {
-      return
-    }
-
-    const validationResult = loginSchema.safeParse(formData)
-    if (!validationResult.success) {
-      return
-    }
-
-    startTransition(() => handleFormSubmit(formData))
+        router.replace('/')
+      } catch {
+        toast({
+          title: 'Error',
+          description: 'Ocurrió un error al iniciar sesión',
+          variant: 'destructive',
+        })
+      }
+    })
   }
 
   return (
-    <form
-      className={cn(className)}
-      onSubmit={handleSubmit(onSubmit)}
-      onSubmitCapture={handleNativeSubmit}
-    >
+    <form className={cn(className)} onSubmit={handleSubmit(onSubmit)} noValidate>
       <section className='flex flex-col gap-5'>
         <Input
           {...register('email')}
@@ -84,6 +71,7 @@ const LoginForm = ({ className }: Props) => {
           name='email'
           placeholder='Email'
           error={errors.email?.message}
+          autoComplete={rememberMe ? 'username' : undefined}
         />
         <Input
           {...register('password')}
@@ -92,11 +80,12 @@ const LoginForm = ({ className }: Props) => {
           name='password'
           placeholder='Ingresar contraseña'
           error={errors.password?.message}
+          autoComplete={rememberMe ? 'current-password' : undefined}
         />
       </section>
       <section className='flex flex-row justify-between mt-5'>
         <div className='flex items-center space-x-2'>
-          <Switch id='remember-me' />
+          <Switch id='remember-me' onClick={() => setRememberMe(!rememberMe)} />
           <Label htmlFor='remember-me'>Recordarme</Label>
         </div>
         <Link href='/' className='text-primary text-sm self-center'>
