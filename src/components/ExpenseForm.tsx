@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
@@ -10,13 +9,10 @@ import { saveExpense } from '@/lib/services/expenseService'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { expenseSchema, ExpenseSchemaType } from '@/validations/expenseSchema'
-import { Expense } from '@/types/expenses'
+import { addExpense } from '@/app/actions/expenses'
+import { Input } from '@/molecules'
 
-interface ExpenseFormProps {
-  addExpense: (expense: Expense) => void
-}
-
-export default function ExpenseForm({ addExpense }: ExpenseFormProps) {
+export default function ExpenseForm() {
   const [isLoading, setIsLoading] = useState(false)
 
   const onSubmit: SubmitHandler<ExpenseSchemaType> = async ({ name, amount }) => {
@@ -50,26 +46,20 @@ export default function ExpenseForm({ addExpense }: ExpenseFormProps) {
       </CardHeader>
       <CardContent>
         <form className='space-y-4' onSubmit={handleSubmit(onSubmit)}>
-          <div>
-            <Label htmlFor='name'>Nombre del gasto</Label>
-            <Input
-              id='name'
-              type='text'
-              placeholder='Ingresa el nombre del gasto'
-              {...register('name')}
-            />
-            {errors.name && <p className='text-sm text-red-600 p-1'>{errors.name.message}</p>}
-          </div>
-          <div>
-            <Label htmlFor='amount'>Monto</Label>
-            <Input
-              id='amount'
-              type='text'
-              placeholder='Ingresa el monto del gasto'
-              {...register('amount')}
-            />
-            {errors.amount && <p className='text-sm text-red-600 p-1'>{errors.amount.message}</p>}
-          </div>
+          <Input
+            id='name'
+            placeholder='Ingresa el nombre del gasto'
+            label='Nombre del gasto'
+            error={errors.name?.message}
+            {...register('name')}
+          />
+          <Input
+            id='amount'
+            placeholder='Ingresar el monto del gasto'
+            label='Monto'
+            error={errors.amount?.message}
+            {...register('amount')}
+          />
           <Button disabled={isLoading} type='submit'>
             {isLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
             Agregar Gasto
