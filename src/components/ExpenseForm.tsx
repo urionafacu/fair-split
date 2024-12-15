@@ -5,15 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import { Expense as SupabaseExpense } from '@/types/supabase'
 import { Loader2 } from 'lucide-react'
 import { saveExpense } from '@/lib/services/expenseService'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { expenseSchema, ExpenseSchemaType } from '@/validations/expenseSchema'
+import { Expense } from '@/types/expenses'
 
 interface ExpenseFormProps {
-  addExpense: (expense: SupabaseExpense) => void
+  addExpense: (expense: Expense) => void
 }
 
 export default function ExpenseForm({ addExpense }: ExpenseFormProps) {

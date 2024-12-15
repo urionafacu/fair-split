@@ -1,15 +1,27 @@
-import React from "react";
-import ExpenseSplitter from "@/components/ExpenseSplitter";
-import { fetchIncomes } from "@/lib/services/incomeService";
-import { fetchExpenses } from "@/lib/services/expenseService";
+import React from 'react'
+import ExpenseSplitter from '@/components/ExpenseSplitter'
+import { getExpenses } from '../actions/expenses'
 
-export const revalidate = 0;
+export const revalidate = 0
 
 export default async function Home() {
-  const [incomes, expenses] = await Promise.all([
-    fetchIncomes(),
-    fetchExpenses(),
-  ]);
+  const expenses = await getExpenses()
 
-  return <ExpenseSplitter incomes={incomes} expenses={expenses} />;
+  return (
+    <ExpenseSplitter
+      incomes={[
+        {
+          id: 1,
+          name: 'Facu',
+          amount: 2000000,
+        },
+        {
+          id: 2,
+          name: 'Mica',
+          amount: 1000000,
+        },
+      ]}
+      expenses={expenses}
+    />
+  )
 }
