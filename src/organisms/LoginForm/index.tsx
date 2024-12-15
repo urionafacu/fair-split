@@ -1,6 +1,6 @@
 'use client'
 
-import { useTransition } from 'react'
+import { FormEvent, useTransition } from 'react'
 import { loginUserAction } from '@/app/actions/auth'
 import { Input } from '@/molecules'
 import { Props } from './types'
@@ -24,6 +24,7 @@ const LoginForm = ({ className }: Props) => {
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
@@ -33,25 +34,48 @@ const LoginForm = ({ className }: Props) => {
     },
   })
 
+  const handleFormSubmit = async (data: LoginSchemaType) => {
+    const { success } = await loginUserAction(data)
+
+    if (!success) {
+      toast({
+        title: 'Ups!',
+        description: 'Las credenciales no son las correctas',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    router.push('/')
+  }
+
   const onSubmit = (data: LoginSchemaType) => {
-    startTransition(async () => {
-      const { success } = await loginUserAction(data)
+    startTransition(() => handleFormSubmit(data))
+  }
 
-      if (!success) {
-        toast({
-          title: 'Ups!',
-          description: 'Las credenciales no son las correctas',
-          variant: 'destructive',
-        })
-        return
-      }
+  const handleNativeSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
-      router.push('/')
-    })
+    const formData = getValues()
+
+    if (!formData.email || !formData.password) {
+      return
+    }
+
+    const validationResult = loginSchema.safeParse(formData)
+    if (!validationResult.success) {
+      return
+    }
+
+    startTransition(() => handleFormSubmit(formData))
   }
 
   return (
-    <form className={cn(className)} onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className={cn(className)}
+      onSubmit={handleSubmit(onSubmit)}
+      onSubmitCapture={handleNativeSubmit}
+    >
       <section className='flex flex-col gap-5'>
         <Input
           {...register('email')}
