@@ -1,30 +1,34 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useTransition } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
-import { saveExpense } from '@/lib/services/expenseService'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { expenseSchema, ExpenseSchemaType } from '@/validations/expenseSchema'
 import { addExpense } from '@/app/actions/expenses'
 import { Input } from '@/molecules'
+import { useToast } from '@/hooks/use-toast'
 
 export default function ExpenseForm() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isPending, startTransition] = useTransition()
+  const { toast } = useToast()
 
   const onSubmit: SubmitHandler<ExpenseSchemaType> = async ({ name, amount }) => {
-    setIsLoading(true)
-    try {
-      const data = await saveExpense(name, amount)
-      addExpense(data)
-      reset()
-    } catch {
-    } finally {
-      setIsLoading(false)
-    }
+    startTransition(async () => {
+      try {
+        // addExpense({ name, amount: amount.toString(), group:  })
+        reset()
+      } catch {
+        toast({
+          title: 'Ups!',
+          description: 'Lo sentimos, algo ocurrió mal',
+          variant: 'destructive',
+        })
+      }
+    })
   }
 
   const {
@@ -60,8 +64,8 @@ export default function ExpenseForm() {
             error={errors.amount?.message}
             {...register('amount')}
           />
-          <Button disabled={isLoading} type='submit'>
-            {isLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
+          <Button disabled={isPending} type='submit'>
+            {isPending && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
             Agregar Gasto
           </Button>
         </form>
