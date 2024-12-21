@@ -26,8 +26,8 @@ const Input = ({ className, label, id, error, ...props }: Props) => {
           {...props}
           id={id}
           type={effectiveType}
-          className={cn(className, {
-            'border-red-500 focus:ring-red-500': error,
+          className={cn('focus-visible:ring-offset-0 focus-visible:ring-primary', className, {
+            'border-red-500 focus:ring-red-500 focus-visible:ring-red-500': error,
             'pr-10': isPassword,
           })}
         />

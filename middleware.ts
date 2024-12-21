@@ -6,7 +6,11 @@ import { obtainNewAccessToken } from './utils/jwt.utils'
 const IS_PRODUCTION = process.env.NODE_ENV === 'production'
 
 // Routes that require authentication
-const PROTECTED_ROUTES = ['/', '/dashboard', '/profile'] as const
+const PROTECTED_ROUTES = [
+  '/',
+  // , '/dashboard',
+  // '/profile'
+] as const
 
 // Routes that are only accessible without authentication
 const AUTH_ROUTES = ['/login', '/register'] as const
