@@ -85,6 +85,12 @@ export const deleteExpenseAction = async (id: Expense['id']): Promise<void> => {
     throw new Error('User does not have session')
   }
 
+  const userId = (jwtDecode(accessToken) as { user_id: string })?.user_id
+
+  if (!userId) {
+    throw new Error('User does not have session')
+  }
+
   const response = await fetch(`${API_BASE_URL}/expenses/${id}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -95,4 +101,7 @@ export const deleteExpenseAction = async (id: Expense['id']): Promise<void> => {
   if (!response.ok) {
     throw new Error('Bad request')
   }
+
+  revalidateTag('expenses')
+  revalidateTag(userId.toString())
 }
