@@ -4,17 +4,17 @@ import { useState, useEffect } from 'react'
 import { Income } from '@/types/supabase'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Pencil } from 'lucide-react'
 // import { updateIncomes } from '@/app/actions/update-income'
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer'
 
 interface IncomeDisplayProps {
   incomes?: Income[]
@@ -25,7 +25,6 @@ export default function IncomeDisplay({ incomes = [], setIncomes }: IncomeDispla
   const [isOpen, setIsOpen] = useState(false)
   const [editableIncomes, setEditableIncomes] = useState<Income[]>([])
 
-  // Actualizar editableIncomes cuando cambien los incomes
   useEffect(() => {
     if (incomes && incomes.length > 0) {
       setEditableIncomes(incomes)
@@ -44,6 +43,9 @@ export default function IncomeDisplay({ incomes = [], setIncomes }: IncomeDispla
     // if (result.success) {
     //   setIncomes(editableIncomes)
     //   setIsOpen(false)
+    // } else {
+    //   // Manejar el error, tal vez mostrar un mensaje al usuario
+    //   console.error('Failed to update incomes')
     // }
   }
 
@@ -54,7 +56,6 @@ export default function IncomeDisplay({ incomes = [], setIncomes }: IncomeDispla
     }).format(amount)
   }
 
-  // Si no hay ingresos, mostrar un mensaje o retornar null
   if (!incomes || incomes.length === 0) {
     return (
       <Card>
@@ -72,38 +73,40 @@ export default function IncomeDisplay({ incomes = [], setIncomes }: IncomeDispla
     <Card>
       <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
         <CardTitle>Ingresos</CardTitle>
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogTrigger asChild>
+        <Drawer open={isOpen} onOpenChange={setIsOpen}>
+          <DrawerTrigger asChild>
             <Button variant='ghost' size='icon'>
-              <Pencil className='size-4' />
+              <Pencil className='h-4 w-4' />
               <span className='sr-only'>Editar ingresos</span>
             </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Editar Ingresos</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className='space-y-4'>
-              {editableIncomes.map((inc) => (
-                <div key={`edit-${inc.id}-${inc.name}`}>
-                  <Label htmlFor={`income-${inc.name}`}>Ingreso de {inc.name}</Label>
-                  <Input
-                    id={`income-${inc.name}`}
-                    type='text'
-                    inputMode='numeric'
-                    pattern='\d*'
-                    value={inc.amount}
-                    onChange={(e) => handleChange(e.target.value, inc.id)}
-                    placeholder='Ingresa el ingreso'
-                  />
-                </div>
-              ))}
-              <Button type='submit' className='w-full'>
-                Guardar cambios
-              </Button>
-            </form>
-          </DialogContent>
-        </Dialog>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>Editar Ingresos</DrawerTitle>
+            </DrawerHeader>
+            <div className='p-4'>
+              <form onSubmit={handleSubmit} className='space-y-4'>
+                {editableIncomes.map((inc) => (
+                  <div key={`edit-${inc.id}-${inc.name}`}>
+                    <Label htmlFor={`income-${inc.name}`}>Ingreso de {inc.name}</Label>
+                    <Input
+                      id={`income-${inc.name}`}
+                      type='text'
+                      inputMode='numeric'
+                      pattern='\d*'
+                      value={inc.amount}
+                      onChange={(e) => handleChange(e.target.value, inc.id)}
+                      placeholder='Ingresa el ingreso'
+                    />
+                  </div>
+                ))}
+                <Button type='submit' className='w-full'>
+                  Guardar cambios
+                </Button>
+              </form>
+            </div>
+          </DrawerContent>
+        </Drawer>
       </CardHeader>
       <CardContent>
         <div className='space-y-4'>
