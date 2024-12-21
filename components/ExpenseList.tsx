@@ -8,11 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Trash2, Search } from 'lucide-react'
 import { formatCurrency } from '@/utils/numberFormat'
 import { Expense } from '@/types/expenses.types'
+import { Input } from '@/molecules'
 
 interface ExpenseListProps {
   expenses: Expense[]
