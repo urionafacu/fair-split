@@ -4,17 +4,11 @@ import { useState, useEffect } from 'react'
 import { Income } from '@/types/supabase'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import Input from '@/molecules/input'
 import { Label } from '@/components/ui/label'
 import { Pencil } from 'lucide-react'
 // import { updateIncomes } from '@/app/actions/update-income'
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/components/ui/drawer'
+import { Modal, ModalTrigger, ModalContent, ModalHeader, ModalTitle } from '@/organisms/Modal'
 
 interface IncomeDisplayProps {
   incomes?: Income[]
@@ -22,7 +16,6 @@ interface IncomeDisplayProps {
 }
 
 export default function IncomeDisplay({ incomes = [], setIncomes }: IncomeDisplayProps) {
-  const [isOpen, setIsOpen] = useState(false)
   const [editableIncomes, setEditableIncomes] = useState<Income[]>([])
 
   useEffect(() => {
@@ -42,9 +35,7 @@ export default function IncomeDisplay({ incomes = [], setIncomes }: IncomeDispla
     // const result = await updateIncomes(editableIncomes)
     // if (result.success) {
     //   setIncomes(editableIncomes)
-    //   setIsOpen(false)
     // } else {
-    //   // Manejar el error, tal vez mostrar un mensaje al usuario
     //   console.error('Failed to update incomes')
     // }
   }
@@ -73,40 +64,39 @@ export default function IncomeDisplay({ incomes = [], setIncomes }: IncomeDispla
     <Card>
       <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
         <CardTitle>Ingresos</CardTitle>
-        <Drawer open={isOpen} onOpenChange={setIsOpen}>
-          <DrawerTrigger asChild>
+        <Modal>
+          <ModalTrigger>
             <Button variant='ghost' size='icon'>
               <Pencil className='h-4 w-4' />
               <span className='sr-only'>Editar ingresos</span>
             </Button>
-          </DrawerTrigger>
-          <DrawerContent>
-            <DrawerHeader>
-              <DrawerTitle>Editar Ingresos</DrawerTitle>
-            </DrawerHeader>
+          </ModalTrigger>
+          <ModalContent>
+            <ModalHeader>
+              <ModalTitle>Editar Ingresos</ModalTitle>
+            </ModalHeader>
             <div className='p-4'>
               <form onSubmit={handleSubmit} className='space-y-4'>
                 {editableIncomes.map((inc) => (
-                  <div key={`edit-${inc.id}-${inc.name}`}>
-                    <Label htmlFor={`income-${inc.name}`}>Ingreso de {inc.name}</Label>
-                    <Input
-                      id={`income-${inc.name}`}
-                      type='text'
-                      inputMode='numeric'
-                      pattern='\d*'
-                      value={inc.amount}
-                      onChange={(e) => handleChange(e.target.value, inc.id)}
-                      placeholder='Ingresa el ingreso'
-                    />
-                  </div>
+                  <Input
+                    id={`income-${inc.name}`}
+                    type='text'
+                    inputMode='numeric'
+                    pattern='\d*'
+                    value={inc.amount}
+                    onChange={(e) => handleChange(e.target.value, inc.id)}
+                    placeholder='Ingresa el ingreso'
+                    label={`Ingreso de ${inc.name}`}
+                    key={`edit-${inc.id}-${inc.name}`}
+                  />
                 ))}
                 <Button type='submit' className='w-full'>
                   Guardar cambios
                 </Button>
               </form>
             </div>
-          </DrawerContent>
-        </Drawer>
+          </ModalContent>
+        </Modal>
       </CardHeader>
       <CardContent>
         <div className='space-y-4'>

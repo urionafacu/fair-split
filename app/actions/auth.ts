@@ -61,3 +61,23 @@ export const loginUserAction = async (formData: LoginSchemaType): Promise<Result
     success: true,
   }
 }
+
+export const logoutAction = async (): Promise<Result> => {
+  const cookieStore = await cookies()
+  const refreshToken = cookieStore.get(AuthTokens.REFRESH)?.value
+
+  if (!refreshToken) {
+    return {
+      success: false,
+      message: 'User does not have session',
+    }
+  }
+
+  cookieStore.delete(AuthTokens.ACCESS)
+  cookieStore.delete(AuthTokens.REFRESH)
+
+  return {
+    success: true,
+    message: 'Success',
+  }
+}
