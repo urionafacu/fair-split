@@ -1,7 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
 import IncomeForm from './IncomeForm'
 import ExpenseForm from './ExpenseForm'
 import ExpenseList from './ExpenseList'
@@ -9,8 +8,11 @@ import ExpenseSummary from './ExpenseSummary'
 import ExpenseChart from './ExpenseChart'
 import { Income } from '@/types/supabase'
 import { deleteExpense as supabaseDeleteExpense } from '@/lib/services/expenseService'
-import { Expense } from '@/types/expenses'
-import HeaderHome from '@/organisms/HeaderHome'
+import { Expense } from '@/types/expenses.types'
+import useAuthStore from '@/store'
+import { selectUser } from '@/store/slices/auth.slice'
+import { deleteExpenseAction } from '@/app/actions/expenses'
+import { useToast } from '@/hooks/use-toast'
 
 type Props = {
   incomes: Income[]
@@ -20,10 +22,28 @@ type Props = {
 export default function ExpenseSplitter({ incomes, expenses }: Props) {
   const [localIncomes, setLocalIncomes] = useState(incomes)
   const [localExpenses, setLocalExpenses] = useState(expenses)
+  const { toast } = useToast()
 
-  const deleteExpense = (id: Expense['id']) => {
-    setLocalExpenses(expenses.filter((e) => e.id !== id))
-    supabaseDeleteExpense(id!)
+  useEffect(() => {
+    setLocalExpenses(expenses)
+  }, [expenses])
+
+  const deleteExpense = async (id: Expense['id']) => {
+    try {
+      setLocalExpenses(expenses.filter((e) => e.id !== id))
+      await deleteExpenseAction(id!)
+      toast({
+        title: 'Gasto eliminado',
+        description: 'El gasto fue eliminado correctamente',
+      })
+    } catch {
+      toast({
+        title: 'Ups!',
+        description: 'Lo sentimos, algo ocurrió mal',
+        variant: 'destructive',
+      })
+      setLocalExpenses(expenses)
+    }
   }
 
   const totalExpenses = localExpenses.reduce((sum, expense) => sum + Number(expense.amount), 0)
@@ -34,9 +54,7 @@ export default function ExpenseSplitter({ incomes, expenses }: Props) {
   const partMica = percentageMica * totalExpenses
 
   return (
-    <div className='page-container'>
-      <HeaderHome />
-
+    <div>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
         <IncomeForm incomes={localIncomes} setIncomes={setLocalIncomes} />
         <ExpenseForm />

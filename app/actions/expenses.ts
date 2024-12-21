@@ -1,15 +1,24 @@
 'use server'
 
+import { revalidateTag } from 'next/cache'
 import { AuthTokens } from '@/constants/auth'
-import { Expense } from '@/types/expenses'
+import { Expense } from '@/types/expenses.types'
 import { API_BASE_URL } from '@/utils/config'
+import camelcaseKeys from 'camelcase-keys'
+import { jwtDecode } from 'jwt-decode'
 import { cookies } from 'next/headers'
 
-export const getExpenses = async () => {
+export const getExpensesAction = async (): Promise<Expense[]> => {
   const cookieStore = await cookies()
   const accessToken = cookieStore.get(AuthTokens.ACCESS)?.value
 
   if (!accessToken) {
+    throw new Error('User does not have session')
+  }
+
+  const userId = (jwtDecode(accessToken) as { user_id: string })?.user_id
+
+  if (!userId) {
     throw new Error('User does not have session')
   }
 
@@ -17,18 +26,23 @@ export const getExpenses = async () => {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
+    next: {
+      tags: ['expenses', userId.toString()],
+    },
   })
 
   if (!response.ok) {
     throw new Error('Bad request')
   }
 
-  return response.json()
+  const data = await response.json()
+
+  return camelcaseKeys(data, { deep: true })
 }
 
-export const addExpense = async (
-  expense: Omit<Expense, 'id' | 'created_at' | 'updated_at' | 'date'>,
-) => {
+export const addExpenseAction = async (
+  expense: Pick<Expense, 'name' | 'amount' | 'date' | 'group'>,
+): Promise<Expense> => {
   const cookieStore = await cookies()
   const accessToken = cookieStore.get(AuthTokens.ACCESS)?.value
 
@@ -36,9 +50,16 @@ export const addExpense = async (
     throw new Error('User does not have session')
   }
 
+  const userId = (jwtDecode(accessToken) as { user_id: string })?.user_id
+
+  if (!userId) {
+    throw new Error('User does not have session')
+  }
+
   const response = await fetch(`${API_BASE_URL}/expenses/`, {
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
     },
     method: 'POST',
     body: JSON.stringify(expense),
@@ -48,5 +69,30 @@ export const addExpense = async (
     throw new Error('Bad request')
   }
 
-  return response.json()
+  const data = await response.json()
+
+  revalidateTag('expenses')
+  revalidateTag(userId.toString())
+
+  return camelcaseKeys(data, { deep: true })
+}
+
+export const deleteExpenseAction = async (id: Expense['id']): Promise<void> => {
+  const cookieStore = await cookies()
+  const accessToken = cookieStore.get(AuthTokens.ACCESS)?.value
+
+  if (!accessToken) {
+    throw new Error('User does not have session')
+  }
+
+  const response = await fetch(`${API_BASE_URL}/expenses/${id}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    method: 'DELETE',
+  })
+
+  if (!response.ok) {
+    throw new Error('Bad request')
+  }
 }

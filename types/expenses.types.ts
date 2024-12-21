@@ -1,9 +1,9 @@
-import { ID } from './common'
+import { ID } from './common.types'
 
 export interface Expense {
   id: ID
-  created_at: string
-  updated_at: string
+  createdAt: string
+  updatedAt: string
   name: string
   amount: string
   date: string

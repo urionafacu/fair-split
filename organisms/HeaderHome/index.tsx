@@ -1,7 +1,19 @@
+'use client'
+
 import Image from 'next/image'
 import Logo from '@/app/images/FairSplitLogo.png'
+import { Props } from './types'
+import useAuthStore from '@/store'
+import { selectInitialize } from '@/store/slices/auth.slice'
+import { useEffect } from 'react'
 
-const HeaderHome = () => {
+const HeaderHome = ({ user, expenses, groups }: Props) => {
+  const initialize = useAuthStore(selectInitialize)
+
+  useEffect(() => {
+    initialize(user, groups!)
+  }, [])
+
   return (
     <header className='flex w-full mb-6 mt-4'>
       <div className='flex flex-col justify-between w-full gap-4 px-6 lg:px-20'>

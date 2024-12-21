@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Trash2, Search } from 'lucide-react'
 import { formatCurrency } from '@/utils/numberFormat'
-import { Expense } from '@/types/expenses'
+import { Expense } from '@/types/expenses.types'
 
 interface ExpenseListProps {
   expenses: Expense[]

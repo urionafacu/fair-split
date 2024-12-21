@@ -1,4 +1,4 @@
-import { Expense } from '@/types/expenses'
+import { Expense } from '@/types/expenses.types'
 
 export async function fetchExpenses(): Promise<Expense[]> {
   return []
@@ -7,12 +7,12 @@ export async function fetchExpenses(): Promise<Expense[]> {
 export async function saveExpense(_: string, _1: number): Promise<Expense> {
   return {
     amount: '',
-    created_at: '',
+    createdAt: '',
     id: 1,
     name: '',
     date: '',
     group: 1,
-    updated_at: '',
+    updatedAt: '',
   }
 }
 

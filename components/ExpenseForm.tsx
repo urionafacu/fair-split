@@ -8,23 +8,36 @@ import { Loader2 } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { expenseSchema, ExpenseSchemaType } from '@/validations/expenseSchema'
-import { addExpense } from '@/app/actions/expenses'
+import { addExpenseAction } from '@/app/actions/expenses'
 import { Input } from '@/molecules'
 import { useToast } from '@/hooks/use-toast'
+import useAuthStore from '@/store'
+import { selectGroups } from '@/store/slices/auth.slice'
+import { toISODateString } from '@/utils/date.utils'
 
 export default function ExpenseForm() {
   const [isPending, startTransition] = useTransition()
   const { toast } = useToast()
+  const groups = useAuthStore(selectGroups)
 
   const onSubmit: SubmitHandler<ExpenseSchemaType> = async ({ name, amount }) => {
     startTransition(async () => {
       try {
-        // addExpense({ name, amount: amount.toString(), group:  })
+        await addExpenseAction({
+          name,
+          amount: amount.toString(),
+          group: groups[0].id,
+          date: toISODateString(new Date()),
+        })
+        toast({
+          title: 'Gasto agregado',
+          description: 'El gasto fue agregado correctamente',
+        })
         reset()
       } catch {
         toast({
-          title: 'Ups!',
-          description: 'Lo sentimos, algo ocurrió mal',
+          title: 'Intentalo nuevamente',
+          description: 'No pudimos agregar tu gasto',
           variant: 'destructive',
         })
       }

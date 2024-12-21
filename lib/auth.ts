@@ -1,31 +1,14 @@
-import { cookies } from 'next/headers'
-import { AuthTokens } from '@/constants/auth'
-import { TokenResponse } from '@/types/auth'
+import { getUserAction } from '@/app/actions/user'
+import { getGroupsAction } from '@/app/actions/group'
+import { getExpensesAction } from '@/app/actions/expenses'
+import resolvePromiseSettled from '@/utils/resolvePromiseSettled'
 
-export async function refreshAccessToken(): Promise<TokenResponse | null> {
-  const cookieStore = await cookies()
-  const refreshToken = cookieStore.get(AuthTokens.REFRESH)?.value
+export const getInitialData = async () => {
+  const [userPromiseSettled, groupsPromiseSettled, expensesPromiseSettled] =
+    await Promise.allSettled([getUserAction(), getGroupsAction(), getExpensesAction()])
 
-  if (!refreshToken) return null
-
-  try {
-    const response = await fetch(`${AuthTokens}/token/refresh/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ refresh: refreshToken }),
-    })
-
-    if (!response.ok) {
-      cookieStore.delete(AuthTokens.ACCESS)
-      cookieStore.delete(AuthTokens.REFRESH)
-      return null
-    }
-
-    const data: TokenResponse = await response.json()
-    return data
-  } catch (_) {
-    return null
-  }
+  const user = resolvePromiseSettled(userPromiseSettled)
+  const groups = resolvePromiseSettled(groupsPromiseSettled)
+  const expenses = resolvePromiseSettled(expensesPromiseSettled)
+  return { user, groups, expenses }
 }
