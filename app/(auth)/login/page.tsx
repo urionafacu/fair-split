@@ -25,7 +25,7 @@ const Login = () => {
       <section className='w-full md:w-1/2 md:p-12'>
         <div className='flex flex-row items-center gap-4 mt-10'>
           <Image src={Logo} priority alt='logo' className='size-20' />
-          <h1 className='text-2xl font-extrabold text-dark-green'>FairSplit</h1>
+          <h1 className='text-2xl font-extrabold text-primary'>FairSplit</h1>
         </div>
         <LoginForm className='mt-12' />
       </section>

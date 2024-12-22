@@ -32,7 +32,7 @@ const HeaderHome = ({ user, expenses, groups }: Props) => {
         <div className='flex flex-row justify-between'>
           <section className='flex flex-row gap-6'>
             <Image src={Logo} alt='logo' className='w-20 h-20 md:w-32 md:h-32 lg:w-40 lg:h-40' />
-            <h1 className='text-4xl font-bold text-dark-green self-center'>FairSplit</h1>
+            <h1 className='text-4xl font-bold text-primary self-center'>FairSplit</h1>
           </section>
           <Button
             variant='outline'
