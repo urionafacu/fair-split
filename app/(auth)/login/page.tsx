@@ -5,7 +5,7 @@ import LoginForm from '@/organisms/LoginForm'
 
 const Login = () => {
   return (
-    <main className='page-container flex'>
+    <main className='page-container container-center gap-12 flex'>
       {/* Left column - hidden on mobile */}
       <section className='hidden md:flex md:w-1/2 flex-col items-center justify-center'>
         <Image
@@ -14,11 +14,10 @@ const Login = () => {
           priority
           className='max-w-[600px] w-full h-auto'
         />
-        <p className='text-center text-gray-600 mt-8 max-w-[600px]'>
-          Lorem ipsum dolor sit amet consectetur. Eget vulputate fames nisl lacinia. Diam id cursus
-          auctor egestas diam auctor id id. At amet condimentum ultricies euismod vivamus egestas
-          faucibus. Justo amet augue venenatis augue consectetur purus adipiscing pellentesque vel.
-        </p>
+        <h2 className='text-center text-gray-600 font-semibold text-2xl mt-8 max-w-[600px]'>
+          La forma moderna de compartir gastos en pareja. División proporcional, automática y sin
+          complicaciones.
+        </h2>
       </section>
 
       {/* Right Column - Full width on mobile */}
