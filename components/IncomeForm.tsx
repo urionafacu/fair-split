@@ -90,9 +90,11 @@ export default function IncomeDisplay({ incomes = [], setIncomes }: IncomeDispla
                     key={`edit-${inc.id}-${inc.name}`}
                   />
                 ))}
-                <Button type='submit' className='w-full'>
-                  Guardar cambios
-                </Button>
+                <div className='pb-safe'>
+                  <Button type='submit' className='w-full'>
+                    Guardar cambios
+                  </Button>
+                </div>
               </form>
             </div>
           </ModalContent>
