@@ -4,6 +4,7 @@ import { loginSchema, LoginSchemaType } from '@/organisms/LoginForm/schema'
 import { API_BASE_URL } from '@/utils/config'
 import { cookies } from 'next/headers'
 import { AuthTokens } from '@/constants/auth'
+import { RegisterSchemaType } from '@/organisms/RegisterForm/schema'
 
 export type Result = {
   message?: string
@@ -81,3 +82,5 @@ export const logoutAction = async (): Promise<Result> => {
     message: 'Success',
   }
 }
+
+// export const registerUserAction = async (formData: RegisterSchemaType): Promise<Result> => {}
