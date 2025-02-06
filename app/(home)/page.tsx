@@ -16,12 +16,12 @@ export default async function Home() {
           {
             id: 1,
             name: 'Facu',
-            amount: 2000000,
+            amount: 2_450_000,
           },
           {
             id: 2,
             name: 'Mica',
-            amount: 1000000,
+            amount: 650_000,
           },
         ]}
         expenses={initialData.expenses!}
