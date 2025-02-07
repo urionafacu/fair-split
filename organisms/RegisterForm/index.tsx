@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
-import { useRouter } from 'next/router'
+// import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import { registerSchema, RegisterSchemaType } from './schema'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -15,7 +15,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 const RegisterForm = ({ className }: Props) => {
   const [isPending, startTransition] = useTransition()
   const { toast } = useToast()
-  const router = useRouter()
 
   const {
     register,
