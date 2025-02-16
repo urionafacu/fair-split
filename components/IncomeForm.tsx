@@ -9,20 +9,21 @@ import { Label } from '@/components/ui/label'
 import { Pencil } from 'lucide-react'
 // import { updateIncomes } from '@/app/actions/update-income'
 import { Modal, ModalTrigger, ModalContent, ModalHeader, ModalTitle } from '@/organisms/Modal'
+import { Group } from '@/types/group.types'
 
 interface IncomeDisplayProps {
-  incomes?: Income[]
-  setIncomes: React.Dispatch<React.SetStateAction<Income[]>>
+  group: Group
+  // setIncomes: React.Dispatch<React.SetStateAction<Income[]>>
 }
 
-export default function IncomeDisplay({ incomes = [], setIncomes }: IncomeDisplayProps) {
-  const [editableIncomes, setEditableIncomes] = useState<Income[]>([])
+export default function IncomeDisplay({ group }: IncomeDisplayProps) {
+  const [editableIncomes, setEditableIncomes] = useState<Group['members']>([])
 
   useEffect(() => {
-    if (incomes && incomes.length > 0) {
-      setEditableIncomes(incomes)
+    if (group && group.members.length > 0) {
+      setEditableIncomes(group.members)
     }
-  }, [incomes])
+  }, [group])
 
   const handleChange = (value: string, id: Income['id']) => {
     setEditableIncomes((current) =>
@@ -47,7 +48,7 @@ export default function IncomeDisplay({ incomes = [], setIncomes }: IncomeDispla
     }).format(amount)
   }
 
-  if (!incomes || incomes.length === 0) {
+  if (!group || group.members.length === 0) {
     return (
       <Card>
         <CardHeader>
@@ -79,15 +80,15 @@ export default function IncomeDisplay({ incomes = [], setIncomes }: IncomeDispla
               <form onSubmit={handleSubmit} className='space-y-4'>
                 {editableIncomes.map((inc) => (
                   <Input
-                    id={`income-${inc.name}`}
+                    id={`income-${inc.user.id}`}
                     type='text'
                     inputMode='numeric'
                     pattern='\d*'
-                    value={inc.amount}
+                    value={inc.income}
                     onChange={(e) => handleChange(e.target.value, inc.id)}
                     placeholder='Ingresa el ingreso'
-                    label={`Ingreso de ${inc.name}`}
-                    key={`edit-${inc.id}-${inc.name}`}
+                    label={`Ingreso de ${inc.income}`}
+                    key={`edit-${inc.id}-${inc.user.firstName}`}
                   />
                 ))}
                 <div className='pb-safe'>
@@ -102,10 +103,13 @@ export default function IncomeDisplay({ incomes = [], setIncomes }: IncomeDispla
       </CardHeader>
       <CardContent>
         <div className='space-y-4'>
-          {incomes.map((inc) => (
-            <div key={`${inc.id}-${inc.name}`} className='flex justify-between items-center'>
-              <Label>Ingreso de {inc.name}</Label>
-              <span className='text-lg font-medium'>{formatCurrency(inc.amount)}</span>
+          {group.members.map((inc) => (
+            <div
+              key={`${inc.id}-${inc.user.firstName}`}
+              className='flex justify-between items-center'
+            >
+              <Label>Ingreso de {inc.user.firstName}</Label>
+              <span className='text-lg font-medium'>{formatCurrency(Number(inc.income))}</span>
             </div>
           ))}
         </div>

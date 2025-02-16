@@ -11,21 +11,7 @@ export default async function Home() {
   return (
     <main className='page-container'>
       <HeaderHome {...initialData} />
-      <ExpenseSplitter
-        incomes={[
-          {
-            id: 1,
-            name: 'Facu',
-            amount: 2_450_000,
-          },
-          {
-            id: 2,
-            name: 'Mica',
-            amount: 650_000,
-          },
-        ]}
-        expenses={initialData.expenses!}
-      />
+      <ExpenseSplitter group={initialData!.groups![0]} expenses={initialData.expenses!} />
     </main>
   )
 }

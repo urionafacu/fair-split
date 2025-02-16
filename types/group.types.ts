@@ -19,9 +19,20 @@ export interface Group {
   members: GroupMember[]
 }
 
+export enum IncomeFrecuency {
+  MONTHLY = 'Monthly',
+  BIWEEKLY = 'Bi-weekly',
+  WEEKLY = 'Weekly',
+  YEARLY = 'Yearly',
+}
+
 interface GroupMember {
   id: ID
   user: Omit<User, 'dateJoined'>
   role: MemberType
   joinedAt: string
+  income: string
+  income_currency: string
+  income_frequency: IncomeFrecuency
+  share_percentage: number
 }

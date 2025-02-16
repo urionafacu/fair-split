@@ -6,18 +6,18 @@ import ExpenseForm from './ExpenseForm'
 import ExpenseList from './ExpenseList'
 import ExpenseSummary from './ExpenseSummary'
 import ExpenseChart from './ExpenseChart'
-import { Income } from '@/types/supabase'
 import { Expense } from '@/types/expenses.types'
 import { deleteExpenseAction } from '@/app/actions/expenses'
 import { useToast } from '@/hooks/use-toast'
+import { Group } from '@/types/group.types'
 
 type Props = {
-  incomes: Income[]
+  group: Group
   expenses: Expense[]
 }
 
-export default function ExpenseSplitter({ incomes, expenses }: Props) {
-  const [localIncomes, setLocalIncomes] = useState(incomes)
+export default function ExpenseSplitter({ group, expenses }: Props) {
+  const [localIncomes, setLocalIncomes] = useState(group)
   const [localExpenses, setLocalExpenses] = useState(expenses)
   const { toast } = useToast()
 
@@ -44,16 +44,23 @@ export default function ExpenseSplitter({ incomes, expenses }: Props) {
   }
 
   const totalExpenses = localExpenses.reduce((sum, expense) => sum + Number(expense.amount), 0)
-  const totalIncome = localIncomes.reduce((prev, current) => prev + current.amount, 0)
-  const percentageFacu = localIncomes[0] ? localIncomes[0].amount / totalIncome : 0
-  const percentageMica = localIncomes[1] ? localIncomes[1].amount / totalIncome : 0
+  const totalIncome = localIncomes.members.reduce(
+    (prev, current) => prev + Number(current.income),
+    0,
+  )
+  const percentageFacu = localIncomes.members[0]
+    ? Number(localIncomes.members![0].income) / totalIncome
+    : 0
+  const percentageMica = localIncomes.members[1]
+    ? Number(localIncomes.members![1].income) / totalIncome
+    : 0
   const partFacu = percentageFacu * totalExpenses
   const partMica = percentageMica * totalExpenses
 
   return (
     <div>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-        <IncomeForm incomes={localIncomes} setIncomes={setLocalIncomes} />
+        <IncomeForm group={localIncomes} />
         <ExpenseForm />
       </div>
       <div className='mt-6'>
