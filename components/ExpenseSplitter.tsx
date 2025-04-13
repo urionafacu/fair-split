@@ -58,7 +58,7 @@ export default function ExpenseSplitter({ group, expenses }: Props) {
   const partMica = percentageMica * totalExpenses
 
   return (
-    <div>
+    <div className=''>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
         <IncomeForm group={localIncomes} />
         <ExpenseForm />
