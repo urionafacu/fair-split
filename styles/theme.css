@@ -1,0 +1,92 @@
+@theme {
+    --font-open-sans: var(--font-open-sans);
+    /*
+     * Tailwind core breakpoints - Standard responsive tiers
+     * These are the official values from Tailwind CSS core
+     */
+    --breakpoint-sm: 40rem; /* 640px - Small devices, large phones */
+    --breakpoint-md: 48rem; /* 768px - Medium devices, tablets */
+    --breakpoint-lg: 64rem; /* 1024px - Large devices, laptops */
+    --breakpoint-xl: 80rem; /* 1280px - Extra large devices, desktops */
+    --breakpoint-2xl: 96rem; /* 1536px - 2X extra large devices, large desktops */
+  
+    /*
+      * Mobile-focused extended breakpoints
+      * Enhanced precision for smaller devices while maintaining Tailwind's pattern
+      */
+    --breakpoint-3xs: 16rem; /* 256px - Extremely small devices, watches */
+    --breakpoint-2xs: 20rem; /* 320px - Very small phones (iPhone 5/SE, Galaxy S5) */
+    --breakpoint-xs: 23.4375rem; /* 375px - Common mobile size (iPhone X/11/12/13) */
+    --breakpoint-xs-plus: 26.75rem; /* 428px - Plus/Max size phones (iPhone Pro Max) */
+    --breakpoint-sm-minus: 30rem; /* 480px - Between phones and small devices */
+  
+    /*
+      * Extended desktop breakpoints
+      * For high-resolution and ultra-wide displays
+      */
+    --breakpoint-3xl: 120rem; /* 1920px - Full HD displays */
+    --breakpoint-4xl: 160rem; /* 2560px - QHD displays */
+    --breakpoint-5xl: 192rem; /* 3072px - Apple Pro Display XDR */
+    --breakpoint-6xl: 240rem; /* 3840px - 4K displays */
+  
+    /*
+      * Intermediate precision breakpoints - Fills gaps between standard sizes
+      * Use these only when designs require targeted adjustments
+      */
+    --breakpoint-sm-plus: 44rem; /* 704px - Between small and medium devices */
+    --breakpoint-md-plus: 56rem; /* 896px - Between medium and large devices */
+    --breakpoint-lg-plus: 72rem; /* 1152px - Between large and extra large devices */
+    --breakpoint-xl-plus: 88rem; /* 1408px - Between XL and 2XL devices */
+  
+    /* --- Text Sizes --- */
+    --text-2xs: 0.625rem; /* 10px */
+    --text-xs: 0.75rem; /* 12px */
+    --text-sm: 0.875rem; /* 14px */
+    --text-base: 1rem; /* 16px */
+    --text-lg: 1.25rem; /* 20px */
+    --text-xl: 1.5rem; /* 24px */
+    --text-2xl: 1.75rem; /* 28px */
+    --text-3xl: 2.25rem; /* 36px */
+    --text-4xl: 2.5rem; /* 40px */
+    --text-5xl: 3rem; /* 48px */
+    --text-6xl: 3.5rem; /* 56px */
+    --text-7xl: 4rem; /* 64px */
+    --text-8xl: 4.5rem; /* 72px */
+    --text-9xl: 5rem; /* 80px */
+  
+    /* --- Colors --- */
+    --color-primary: var(--primary);
+    --color-secondary: var(--secondary);
+
+    --color-primary-100: var(--primary-100);
+    --color-primary-200: var(--primary-200);
+    --color-primary-300: var(--primary-300);
+    --color-primary-400: var(--primary-400);
+    --color-primary-500: var(--primary-500);
+    --color-primary-600: var(--primary-600);
+    --color-primary-700: var(--primary-700);
+    --color-primary-800: var(--primary-800);
+    --color-primary-900: var(--primary-900);
+    --color-primary-1000: var(--primary-1000);
+
+    --color-secondary-100: var(--secondary-100);
+    --color-secondary-200: var(--secondary-200);
+    --color-secondary-300: var(--secondary-300);
+    --color-secondary-400: var(--secondary-400);
+    --color-secondary-500: var(--secondary-500);
+    --color-secondary-600: var(--secondary-600);
+    --color-secondary-700: var(--secondary-700);
+    --color-secondary-800: var(--secondary-800);
+    --color-secondary-900: var(--secondary-900);
+    --color-secondary-1000: var(--secondary-1000);
+
+    --color-neutral-black: var(--neutral-black);
+    --color-neutral-green: var(--neutral-green);
+    --color-neutral-white: var(--neutral-white);
+  
+  
+    /* Base colors */
+    --color-white: var(--white);
+    --color-black: var(--black);
+  }
+  

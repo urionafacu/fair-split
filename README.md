@@ -1,6 +1,6 @@
-# Expense Splitter
+# Fair Split
 
-Expense Splitter is a modern web application designed to help couples manage and split their shared expenses fairly based on their individual incomes. Built with Next.js 14 and TypeScript, this app offers an intuitive interface for tracking expenses and visualizing cost distribution.
+Fair Split is a modern web application designed to help couples manage and split their shared expenses fairly based on their individual incomes. Built with Next.js 15 and TypeScript, this app offers an intuitive interface for tracking expenses and visualizing cost distribution.
 
 ## Features
 
@@ -12,8 +12,8 @@ Expense Splitter is a modern web application designed to help couples manage and
 
 ## Technologies Used
 
-- Next.js 14 (App Router)
-- React 18
+- Next.js 15 (App Router)
+- React 19
 - TypeScript
 - Tailwind CSS
 - shadcn/ui components
@@ -35,12 +35,12 @@ To run this project locally, follow these steps:
 
 3. Install dependencies:
    ```
-   npm install
+   pnpm install
    ```
 
 4. Run the development server:
    ```
-   npm run dev
+   pnpm dev
    ```
 
 5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

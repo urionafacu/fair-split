@@ -1,10 +1,10 @@
 'use server'
 
-import { loginSchema, LoginSchemaType } from '@/organisms/LoginForm/schema'
+import { loginSchema, LoginSchemaType } from '@/components/login-form/login-form.schema'
 import { API_BASE_URL } from '@/utils/config'
 import { cookies } from 'next/headers'
 import { AuthTokens } from '@/constants/auth'
-import { RegisterSchemaType } from '@/organisms/RegisterForm/schema'
+import { RegisterSchemaType } from '@/components/register-form/register-form.schema'
 
 export type Result = {
   message?: string

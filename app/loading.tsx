@@ -1,6 +1,6 @@
-import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import React from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/primitives/card'
+import { Skeleton } from '@/components/primitives/skeleton'
 
 export default function Loading() {
   return (
@@ -104,5 +104,5 @@ export default function Loading() {
         </Card>
       </div>
     </div>
-  );
+  )
 }

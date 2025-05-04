@@ -1,15 +1,18 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { Open_Sans } from 'next/font/google'
-import { Toaster } from '@/components/ui/toaster'
+import { Toaster } from '@/components/primitives/toaster'
 
 const openSans = Open_Sans({
   subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-open-sans',
+  weight: ['400', '500', '600', '700', '800'],
 })
 
 export const metadata: Metadata = {
   title: 'Fair Split',
-  description: 'Web App for couples to manage shared expenses',
+  description: 'La app definitiva para dividir gastos con tu pareja',
 }
 
 export const viewport: Viewport = {
@@ -26,10 +29,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='es'>
-      <body className={`${openSans.className} antialiased`}>
+    <html lang="es">
+      <body className={`${openSans.variable} antialiased`}>
         <main>{children}</main>
-        <Toaster />
+        <Toaster position="top-center" />
       </body>
     </html>
   )
